@@ -1,7 +1,7 @@
 # Boom Challenge — Trajectory Unknown
 ### Physics-informed AI/ML solution for asteroid ejecta prediction
 
-**Submitted by:** Goutam Roy 
+**Submitted by:** Goutam Roy                       
 **Submission Type:** Individual (Solo)  
 **Challenge:** [Boom Challenge on Freelancer.com](https://www.freelancer.com/boom)
 
