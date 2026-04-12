@@ -1,0 +1,47 @@
+VIDEO SCRIPT — Boom Challenge Submission
+By: Goutam Roy | @Goutam895
+Duration: ~2 minutes
+========================================
+
+[INTRO — 0:00–0:15]
+"Hi. My name is Goutam Roy.
+This is my submission for the Boom Challenge."
+
+[PROBLEM — 0:15–0:35]
+"The challenge asks us to predict
+what happens after an asteroid hits a surface.
+
+We have 8 input parameters —
+like energy, gravity, and impact angle.
+
+We need to predict 6 outputs —
+like fragment size and how far they travel."
+
+[MODEL — 0:35–1:05]
+"I used XGBoost — a machine learning algorithm
+that is very good at finding patterns in data.
+
+I trained it on 2,930 asteroid impact simulations.
+
+My model achieves over 97% accuracy
+on data it has never seen before."
+
+[RESULTS — 1:05–1:35]
+"For Forward Prediction —
+I predicted all 492 test scenarios.
+
+For Inverse Design —
+I found 20 impact scenarios
+where P80 is between 96 and 101,
+and R95 is below 175.
+
+All 20 scenarios pass the constraints."
+
+[CLOSE — 1:35–2:00]
+"All files are in my GitHub repository —
+the code, predictions, and design scenarios.
+
+Thank you for this challenge."
+
+[END]
+========================================
