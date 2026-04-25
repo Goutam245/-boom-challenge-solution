@@ -142,18 +142,24 @@ The same pipeline applies to any tabular physics simulation dataset with defined
 
 ## Repository Structure
 boom-challenge-solution/
-├── solution.py
-├── requirements.txt
-├── prediction_submission.csv
-├── design_submission.csv
-├── README.md
+│
+├── solution.py                   # Main ML pipeline (train → predict → design)
+├── requirements.txt              # Python dependencies with exact versions
+│
+├── prediction_submission.csv     # Forward prediction output (492 scenarios)
+├── design_submission.csv         # Inverse design output (20 scenarios)
+├── README.md                     # This file
+│
 └── Boom-Challenge-Datasets-main/
-├── forward_prediction/
-│   ├── train.csv
-│   ├── train_labels.csv
-│   └── test.csv
-└── inverse_design/
-└── constraints.json
+    │
+    ├── forward_prediction/
+    │   ├── train.csv             # Training input features (2,930 scenarios)
+    │   ├── train_labels.csv      # Training output labels (6 targets)
+    │   └── test.csv              # Test input features (492 scenarios)
+    │
+    └── inverse_design/
+        ├── constraints.json      # Output constraints + input bounds
+        └── design_submission_template.csv
 
 ---
 
