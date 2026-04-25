@@ -80,6 +80,8 @@ XGBoost was chosen for its ability to capture non-linear physical interactions b
 
 ### Physics Rationale
 
+The model predicts ejecta outcomes from the target surface only. The projectile is not modeled as a separate fragmenting object.
+
 | Parameter | Physical Role |
 |---|---|
 | Energy + Coupling | Drive fragment size — higher energy with efficient coupling produces larger P80 |
@@ -131,7 +133,7 @@ The same pipeline applies to any tabular physics simulation dataset with defined
 
 ### Inverse Design
 - 20 valid scenarios, all satisfying:
-  - P80 between 96.21 and 100.63 (target: 96-101)
+  - P80 between 96.21 and 100.63 (target: 96–101)
   - R95 max 111.46 (target: <= 175)
   - All input features within declared bounds
 - Output: `design_submission.csv`
@@ -139,8 +141,6 @@ The same pipeline applies to any tabular physics simulation dataset with defined
 ---
 
 ## Repository Structure
-
-```
 boom-challenge-solution/
 ├── solution.py
 ├── requirements.txt
@@ -148,13 +148,12 @@ boom-challenge-solution/
 ├── design_submission.csv
 ├── README.md
 └── Boom-Challenge-Datasets-main/
-    ├── forward_prediction/
-    │   ├── train.csv
-    │   ├── train_labels.csv
-    │   └── test.csv
-    └── inverse_design/
-        └── constraints.json
-```
+├── forward_prediction/
+│   ├── train.csv
+│   ├── train_labels.csv
+│   └── test.csv
+└── inverse_design/
+└── constraints.json
 
 ---
 
