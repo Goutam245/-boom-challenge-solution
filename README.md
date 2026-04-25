@@ -141,6 +141,8 @@ The same pipeline applies to any tabular physics simulation dataset with defined
 ---
 
 ## Repository Structure
+
+
 boom-challenge-solution/
 │
 ├── solution.py                   # Main ML pipeline (train → predict → design)
@@ -160,7 +162,6 @@ boom-challenge-solution/
     └── inverse_design/
         ├── constraints.json      # Output constraints + input bounds
         └── design_submission_template.csv
-
 ---
 
 ## Contact
