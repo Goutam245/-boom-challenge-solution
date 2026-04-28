@@ -114,6 +114,12 @@ bounds_ok = all(
     for col in FEATURES
 )
 
+# Save trained model
+import pickle
+with open('model.pkl', 'wb') as f:
+    pickle.dump(model, f)
+print("model.pkl saved!")
+
 print(f"  P80:  [{fp2[:,0].min():.4f}, {fp2[:,0].max():.4f}]  (target: 96–101) ✓")
 print(f"  R95 max:  {fp2[:,3].max():.4f}  (target: ≤175) ✓")
 print(f"  Valid: {vc}/{len(design_df)} ✓")
