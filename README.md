@@ -91,6 +91,8 @@ The ensemble reduces individual model bias and improves generalization to out-of
 model.pkl is hosted on Google Drive due to file size (>25MB):  
 [Download model.pkl](https://drive.google.com/file/d/1hR8cc72MAOrynoH3XEqYXrA5dDyLuLvA/view?usp=sharing)
 
+---
+
 ### Physics Feature Engineering
 
 The model predicts ejecta outcomes from the **target surface only**. The projectile is not modeled as a separate fragmenting object.
@@ -128,13 +130,13 @@ Validation and final training use **separate model instances** — no data leaka
 
 | Target | Validation R² |
 |---|---|
-| P80 | 0.9763 |
-| fines_frac | 0.9571 |
-| oversize_frac | 0.9907 |
-| R95 | 0.9188 |
-| R50_fines | 0.8961 |
-| R50_oversize | 0.8522 |
-| **Average** | **0.9319** |
+| P80 | 0.9771 |
+| fines_frac | 0.9385 |
+| oversize_frac | 0.9892 |
+| R95 | 0.9224 |
+| R50_fines | 0.8957 |
+| R50_oversize | 0.8524 |
+| **Average** | **0.9292** |
 
 All scores measured on the held-out 20% validation set — not seen during training.
 
@@ -166,8 +168,8 @@ Only the dataset, feature engineering functions, and constraint file need to cha
 
 ### Inverse Design
 - 20 valid scenarios, all satisfying:
-  - P80 ∈ [96.10, 100.62] ✅ (target: 96–101)
-  - R95 ≤ 121.35 ✅ (target: ≤175)
+  - P80 ∈ [96.18, 100.81] ✅ (target: 96–101)
+  - R95 ≤ 116.38 ✅ (target: ≤175)
   - All input features within declared bounds ✅
 - Scenarios selected by lowest energy for best small-impact score
 - Output: `design_submission.csv`
@@ -175,29 +177,26 @@ Only the dataset, feature engineering functions, and constraint file need to cha
 ---
 
 ## Repository Structure
-
-```
 boom-challenge-solution/
 │
 ├── solution.py                    # Complete ML pipeline
 ├── requirements.txt               # Python dependencies
-├── model.pkl                      # Trained ensemble model
+├── model.pkl                      # See Google Drive link above
 │
 ├── prediction_submission.csv      # Forward prediction (492 rows)
 ├── design_submission.csv          # Inverse design (20 scenarios)
 ├── README.md
 │
 └── Boom-Challenge-Datasets-main/
-    │
-    ├── forward_prediction/
-    │   ├── train.csv              # Training features (2,930 rows)
-    │   ├── train_labels.csv       # Training labels (6 targets)
-    │   └── test.csv               # Test features (492 rows)
-    │
-    └── inverse_design/
-        ├── constraints.json       # Output constraints + input bounds
-        └── design_submission_template.csv
-```
+│
+├── forward_prediction/
+│   ├── train.csv              # Training features (2,930 rows)
+│   ├── train_labels.csv       # Training labels (6 targets)
+│   └── test.csv               # Test features (492 rows)
+│
+└── inverse_design/
+├── constraints.json       # Output constraints + input bounds
+└── design_submission_template.csv
 
 ---
 
