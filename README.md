@@ -86,6 +86,11 @@ The ensemble reduces individual model bias and improves generalization to out-of
 
 ---
 
+## Trained Model
+
+model.pkl is hosted on Google Drive due to file size (>25MB):  
+[Download model.pkl](https://drive.google.com/file/d/1hR8cc72MAOrynoH3XEqYXrA5dDyLuLvA/view?usp=sharing)
+
 ### Physics Feature Engineering
 
 The model predicts ejecta outcomes from the **target surface only**. The projectile is not modeled as a separate fragmenting object.
