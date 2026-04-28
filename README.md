@@ -35,6 +35,7 @@ python solution.py
 ```
 
 ### Generated output files
+
 | File | Description |
 |---|---|
 | `prediction_submission.csv` | Forward prediction — 492 test scenarios |
@@ -100,6 +101,7 @@ The model predicts ejecta outcomes from the **target surface only**. The project
 **11 physics-derived features** are engineered on top of the 8 base parameters (19 total), grounded in impact mechanics:
 
 #### Range-driving features (govern R95, R50)
+
 | Feature | Formula | Physical Meaning |
 |---|---|---|
 | `energy_per_gravity` | energy / gravity | Lower gravity → fragments travel farther |
@@ -108,6 +110,7 @@ The model predicts ejecta outcomes from the **target surface only**. The project
 | `atmosphere_damping` | atmosphere × energy | Atmospheric drag reduces ejecta range |
 
 #### Size-driving features (govern P80, fines/oversize)
+
 | Feature | Formula | Physical Meaning |
 |---|---|---|
 | `energy_x_coupling` | energy × coupling | Energy transferred into target surface |
@@ -115,6 +118,7 @@ The model predicts ejecta outcomes from the **target surface only**. The project
 | `energy_squared` | energy² | Non-linear energy scaling of fragment size |
 
 #### Material property interactions (govern fines_frac, oversize_frac)
+
 | Feature | Formula | Physical Meaning |
 |---|---|---|
 | `gravity_x_strength` | gravity × strength | Surface resistance to fragmentation |
@@ -177,6 +181,8 @@ Only the dataset, feature engineering functions, and constraint file need to cha
 ---
 
 ## Repository Structure
+
+```
 boom-challenge-solution/
 │
 ├── solution.py                    # Complete ML pipeline
@@ -188,15 +194,16 @@ boom-challenge-solution/
 ├── README.md
 │
 └── Boom-Challenge-Datasets-main/
-│
-├── forward_prediction/
-│   ├── train.csv              # Training features (2,930 rows)
-│   ├── train_labels.csv       # Training labels (6 targets)
-│   └── test.csv               # Test features (492 rows)
-│
-└── inverse_design/
-├── constraints.json       # Output constraints + input bounds
-└── design_submission_template.csv
+    │
+    ├── forward_prediction/
+    │   ├── train.csv              # Training features (2,930 rows)
+    │   ├── train_labels.csv       # Training labels (6 targets)
+    │   └── test.csv               # Test features (492 rows)
+    │
+    └── inverse_design/
+        ├── constraints.json       # Output constraints + input bounds
+        └── design_submission_template.csv
+```
 
 ---
 
