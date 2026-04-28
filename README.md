@@ -1,59 +1,49 @@
 # Boom Challenge — Trajectory Unknown
-### Physics-Informed AI/ML Solution for Asteroid Ejecta Prediction
+### Physics-informed Ensemble ML solution for asteroid ejecta prediction
 
----
-
-**Submitted by:** Goutam Roy
-
-**Freelancer Profile:** [@Goutam895](https://www.freelancer.com/u/Goutam895)
-
-**Submission Type:** Individual (Solo)
-
+**Submitted by:** Goutam Roy  
+**Freelancer Profile:** [@Goutam895](https://www.freelancer.com/u/Goutam895)  
+**Submission Type:** Individual (Solo)  
 **Challenge:** [Boom Challenge on Freelancer.com](https://www.freelancer.com/boom)
 
 ---
 
 ## Overview
 
-This is a solo submission by **Goutam Roy** for the **Boom Challenge**, covering both parts:
+Solo submission for the **Boom Challenge**, covering both parts:
 
 - **Part 1 — Forward Prediction:** Predict 6 ejecta outcomes from 8 impact parameters
-- **Part 2 — Inverse Design:** Propose 20 impact scenarios satisfying given output constraints
+- **Part 2 — Inverse Design:** Propose 20 impact scenarios satisfying output constraints
 
-All code, modeling, and submission files were developed independently by a single individual.
+All code, physics feature engineering, modeling, and submission files were developed independently.
 
 ---
 
 ## How to Reproduce
 
-### Step 1 — Install Dependencies
-
+### Step 1 — Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### Step 2 — Place Dataset
-
-Make sure the `Boom-Challenge-Datasets-main/` folder is in the same directory as `solution.py`.
+### Step 2 — Place dataset
+Ensure `Boom-Challenge-Datasets-main/` is in the same directory as `solution.py`.
 
 ### Step 3 — Run
-
 ```bash
 python solution.py
 ```
 
-### Output Files Generated
-
+### Generated output files
 | File | Description |
 |---|---|
 | `prediction_submission.csv` | Forward prediction — 492 test scenarios |
-| `design_submission.csv` | Inverse design — 20 scenarios |
+| `design_submission.csv` | Inverse design — 20 optimized scenarios |
+| `model.pkl` | Trained ensemble model (XGBoost + Random Forest) |
 
 ---
 
 ## Software Requirements
-
-See `requirements.txt` for exact versions.
 
 | Package | Version |
 |---|---|
@@ -64,6 +54,8 @@ See `requirements.txt` for exact versions.
 | numpy | 2.4.3 |
 | scipy | 1.17.1 |
 
+No GPU required. No special drivers or CUDA needed.
+
 ---
 
 ## Hardware Requirements
@@ -73,78 +65,106 @@ See `requirements.txt` for exact versions.
 | CPU | Any modern CPU (Intel / AMD) |
 | RAM | 2 GB minimum |
 | GPU | Not required |
-| Training time | ~25 seconds on a standard laptop CPU |
+| Training time | ~30 seconds on standard laptop CPU |
 | OS | Windows / Linux / macOS |
-| Cloud cost | $0 — runs entirely on local hardware |
+| Cloud cost | $0 |
 
 ---
 
 ## Algorithm
 
-### Model: XGBoost Multi-Output Regressor
+### Model: Weighted Ensemble — XGBoost + Random Forest
 
-XGBoost was chosen for its ability to capture non-linear physical interactions between impact parameters (e.g., energy × coupling, gravity × angle). A `MultiOutputRegressor` wrapper trains one independent gradient-boosted tree per output target.
+Two complementary models are trained and their predictions combined:
 
-### Physics Rationale
+| Model | Weight | Strength |
+|---|---|---|
+| XGBoost | 55% | Non-linear interactions, handles outliers well |
+| Random Forest | 45% | Variance reduction, stable on small datasets |
 
-The model predicts ejecta outcomes from the target surface only. The projectile is not modeled as a separate fragmenting object.
+The ensemble reduces individual model bias and improves generalization to out-of-distribution test scenarios.
 
-| Parameter | Physical Role |
-|---|---|
-| Energy + Coupling | Drive fragment size — higher energy with efficient coupling produces larger P80 |
-| Gravity | Constrains ejecta range — higher gravity pulls fragments back, reducing R95 |
-| Porosity + Strength | Control fragmentation into fines — porous, weak material produces more fines_frac |
-| Angle | Affects directionality — grazing impacts produce more asymmetric spread |
-| Shape factor | Controls irregularity — higher value produces more oversize fragments |
+---
 
-### Validation R² Scores (80/20 Train-Val Split, Unseen Data)
+### Physics Feature Engineering
+
+The model predicts ejecta outcomes from the **target surface only**. The projectile is not modeled as a separate fragmenting object.
+
+**11 physics-derived features** are engineered on top of the 8 base parameters (19 total), grounded in impact mechanics:
+
+#### Range-driving features (govern R95, R50)
+| Feature | Formula | Physical Meaning |
+|---|---|---|
+| `energy_per_gravity` | energy / gravity | Lower gravity → fragments travel farther |
+| `dispersal_index` | energy / (gravity × strength) | Unified ejecta range metric |
+| `coupling_efficiency` | energy × coupling / gravity | Effective energy per gravitational pull |
+| `atmosphere_damping` | atmosphere × energy | Atmospheric drag reduces ejecta range |
+
+#### Size-driving features (govern P80, fines/oversize)
+| Feature | Formula | Physical Meaning |
+|---|---|---|
+| `energy_x_coupling` | energy × coupling | Energy transferred into target surface |
+| `energy_x_angle` | energy × angle_rad | Impact momentum directionality |
+| `energy_squared` | energy² | Non-linear energy scaling of fragment size |
+
+#### Material property interactions (govern fines_frac, oversize_frac)
+| Feature | Formula | Physical Meaning |
+|---|---|---|
+| `gravity_x_strength` | gravity × strength | Surface resistance to fragmentation |
+| `porosity_x_strength` | porosity × strength | Material cohesion — controls fines output |
+| `material_resistance` | strength × (1 − porosity) | Solid fraction governs coarse fragments |
+| `shape_x_coupling` | shape_factor × coupling | Impactor shape effect on oversize fraction |
+
+---
+
+### Validation R² Scores
+
+Validation and final training use **separate model instances** — no data leakage.
 
 | Target | Validation R² |
 |---|---|
-| P80 | 0.9730 |
-| fines_frac | 0.9416 |
-| oversize_frac | 0.9884 |
-| R95 | 0.9097 |
-| R50_fines | 0.8820 |
-| R50_oversize | 0.8417 |
+| P80 | 0.9763 |
+| fines_frac | 0.9571 |
+| oversize_frac | 0.9907 |
+| R95 | 0.9188 |
+| R50_fines | 0.8961 |
+| R50_oversize | 0.8522 |
+| **Average** | **0.9319** |
 
-All scores are measured on the held-out 20% validation set — not seen during training.
+All scores measured on the held-out 20% validation set — not seen during training.
 
-### Key Implementation Details
-
-- `fines_frac` and `oversize_frac` clipped to >= 0 (physical fractions cannot be negative)
-- Model evaluated on validation split first, then retrained on full dataset before test predictions
-- Inverse design uses batch prediction over training rows to identify constraint-satisfying regions
-- All inverse design inputs clipped to declared bounds from `constraints.json`
-- Two-pass re-verification ensures only truly valid scenarios are kept in the final output
+---
 
 ### Assumptions and Limitations
 
-- Model assumes Mox-95 physics is self-consistent with the training data distribution
-- XGBoost does not extrapolate well beyond the training feature range — out-of-distribution test scenarios may have higher error
+- Model assumes Mox-95 physics is self-consistent with the training distribution
+- Ensemble methods do not extrapolate beyond the training feature range — out-of-distribution scenarios may show higher error
+- Physics features are interaction terms derived from domain knowledge; no differential equations are solved
 - Stochastic nature of real impacts is not modeled — predictions represent average outcomes
-- Inverse design relies on training data proximity — parameter regions with no training coverage may be missed
 
 ### Extensibility
 
-The same pipeline applies to any tabular physics simulation dataset with defined inputs and outputs. Candidate applications include: volcanic ejecta modeling, building collapse debris prediction, landslide runout estimation, and underwater explosion fragment dispersal. Only the dataset and constraint file need to change — the core algorithm is fully domain-agnostic.
+The pipeline applies to any physics simulation dataset with tabular input/output. The physics feature engineering step can be adapted to domain-specific interaction terms.
+
+Candidate applications: volcanic ejecta modeling, building collapse debris prediction, landslide runout estimation, underwater explosion fragment dispersal.
+
+Only the dataset, feature engineering functions, and constraint file need to change — the ensemble architecture is fully domain-agnostic.
 
 ---
 
 ## Results
 
 ### Forward Prediction
-
 - 492 test scenarios predicted
 - Output: `prediction_submission.csv`
-- No negative fraction values
+- No negative fraction values ✓
 
 ### Inverse Design
-
 - 20 valid scenarios, all satisfying:
-  - P80 between 96.21 and 100.63 (target: 96–101) ✅
-  - R95 max 111.46 (target: <= 175) ✅
+  - P80 ∈ [96.10, 100.62] ✅ (target: 96–101)
+  - R95 ≤ 121.35 ✅ (target: ≤175)
   - All input features within declared bounds ✅
+- Scenarios selected by lowest energy for best small-impact score
 - Output: `design_submission.csv`
 
 ---
@@ -154,22 +174,23 @@ The same pipeline applies to any tabular physics simulation dataset with defined
 ```
 boom-challenge-solution/
 │
-├── solution.py                        # Main ML pipeline (train → predict → design)
-├── requirements.txt                   # Python dependencies with exact versions
+├── solution.py                    # Complete ML pipeline
+├── requirements.txt               # Python dependencies
+├── model.pkl                      # Trained ensemble model
 │
-├── prediction_submission.csv          # Forward prediction output (492 scenarios)
-├── design_submission.csv              # Inverse design output (20 scenarios)
-├── README.md                          # This file
+├── prediction_submission.csv      # Forward prediction (492 rows)
+├── design_submission.csv          # Inverse design (20 scenarios)
+├── README.md
 │
 └── Boom-Challenge-Datasets-main/
     │
     ├── forward_prediction/
-    │   ├── train.csv                  # Training input features (2,930 scenarios)
-    │   ├── train_labels.csv           # Training output labels (6 targets)
-    │   └── test.csv                   # Test input features (492 scenarios)
+    │   ├── train.csv              # Training features (2,930 rows)
+    │   ├── train_labels.csv       # Training labels (6 targets)
+    │   └── test.csv               # Test features (492 rows)
     │
     └── inverse_design/
-        ├── constraints.json           # Output constraints + input bounds
+        ├── constraints.json       # Output constraints + input bounds
         └── design_submission_template.csv
 ```
 
@@ -177,5 +198,5 @@ boom-challenge-solution/
 
 ## Contact
 
-**Goutam Roy**
+**Goutam Roy**  
 Freelancer: [@Goutam895](https://www.freelancer.com/u/Goutam895)
